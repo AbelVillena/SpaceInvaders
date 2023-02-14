@@ -18,6 +18,8 @@ public class Bullet {
     private TextColor color;
     private TextColor backgroundcolor;
     private TextCharacter bulletsymbol;
+    private int MAX_COUNTER=24;
+    private int counter=MAX_COUNTER;  
 
     public Bullet() {
     }
@@ -41,13 +43,24 @@ public class Bullet {
     }
     
     public void paint(Screen s){
-        s.setCharacter(this.posicion.getX(), this.posicion.getY(), this.bulletsymbol);
+        s.setCharacter(this.getPosicion().getX(), this.getPosicion().getY(), this.bulletsymbol);
     }
     
     public void moveVertical(int incy, int miny, int maxy){
-        if(this.posicion.getY() + incy >= miny && this.posicion.getY() + incy<maxy){
-            this.posicion.addy(incy);
+        this.counter--;
+        if(this.counter==0){
+            this.counter=this.MAX_COUNTER;
+        if( this.getPosicion().getY() + incy >= miny && this.getPosicion().getY() + incy<maxy){
+            this.getPosicion().addy(incy);
         }
+    }
+    }
+
+    /**
+     * @return the posicion
+     */
+    public Point2D getPosicion() {
+        return posicion;
     }
     
 }

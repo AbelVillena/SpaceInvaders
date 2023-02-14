@@ -27,6 +27,8 @@ public class Game {
     private Screen screen;
     private boolean exit_key;
     private Bullet bala;
+    private Ship nave;
+    private Wall wall;
 
     public Game() {
         this.exit_key = false;
@@ -39,6 +41,8 @@ public class Game {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         bala = new Bullet(40, 12);
+        nave = new Ship(60,20); 
+        wall = new Wall(50,15);
     }
 
     public void loop() {
@@ -53,6 +57,11 @@ public class Game {
                 process_input();
                 update();
                 paint();
+                try {
+                    Thread.sleep(( 1 / 60 ) * 1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             //Al pulsar escape se cierra la ventana y el terminal.
             screen.close();
@@ -73,7 +82,9 @@ public class Game {
                             TextColor.ANSI.BLACK));
                 }
             }
+            this.nave.paint(s);
             this.bala.paint(s);
+            this.wall.paint(s);
             screen.refresh();
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
@@ -81,12 +92,14 @@ public class Game {
     }
 
     private void update() {
-
+        this.nave.moveBullets();
     }
 
     private void paint() {
         try {
+            this.nave.paint(this.screen);
             this.bala.paint(this.screen);
+            this.wall.paint(screen);
             screen.refresh();
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,6 +127,27 @@ public class Game {
                 this.bala.moveVertical(1, 0, 24);
                 screen.clear();
             }
+            if (keyStroke.getKeyType() == KeyType.ArrowRight) {
+                this.nave.moveHorizontal(1, 0, 80);
+                screen.clear();
+            }
+            if (keyStroke.getKeyType() == KeyType.ArrowLeft) {
+                this.nave.moveHorizontal(-1, 0, 80);
+                screen.clear();
+            }
+            if (keyStroke.getKeyType() == KeyType.Enter) {
+                this.nave.shoot();
+                screen.clear();
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
